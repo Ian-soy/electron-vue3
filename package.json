@@ -1,0 +1,39 @@
+{
+  "name": "electron-vue",
+  "private": true,
+  "version": "0.0.0",
+  "author": "yuanjun",
+  "description": "从0开始创建electron桌面端，所用技术栈包含vue3、ts、vite、electron、electron-builder��旨在学习",
+  "license": "MIT",
+  "keywords": [
+    "electron",
+    "vue3",
+    "typescript",
+    "vite",
+    "electron-builder"
+  ],
+  "time": "2025-06-20",
+  "main": "dist-electron/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build:electron": "vue-tsc -b && vite build && electron-builder -c electron.config.js",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "electron": "^37.1.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.0",
+    "vite-plugin-electron": "^0.29.0",
+    "vue-tsc": "^2.2.10"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
