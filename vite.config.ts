@@ -10,6 +10,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 import electron from 'vite-plugin-electron'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -30,5 +31,13 @@ export default defineConfig({
         },
       }
     }
-  ])],
+  ]),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'src/assets/*', // 要复制的文件
+          dest: 'dist-electron/assets' // 输出目录 (位于dist下)
+        }
+      ]
+    })],
 })

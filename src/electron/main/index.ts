@@ -6,9 +6,10 @@
  * author: yuanjun
  * date: 2025-06-20
 */
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
 import path from 'path';
 
+// 主进程事件监听
 app.whenReady().then(() => {
   const mainWindow = new BrowserWindow({
     width: 800,
@@ -23,9 +24,8 @@ app.whenReady().then(() => {
     }
   })
 
-  console.log(111);
+  // 窗口控制IPC监听
   mainWindow.on('ready-to-show', () => {
-    console.log(123)
     mainWindow.show();
   })
 
@@ -35,6 +35,21 @@ app.whenReady().then(() => {
     // 生产环境下，加载打包后的文件
     mainWindow.loadFile('dist/index.html')
   }
+
+  // 系统托盘
+  // 开发环境使用 src 目录
+  const devIcon = path.join(__dirname, '../../src/assets/icon.ico')
+
+  // 生产环境使用 resources 目录
+  const prodIcon = path.join(process.resourcesPath, 'assets/icon.ico')
+  const finalIcon = process.env.NODE_ENV === 'development' ? devIcon : prodIcon
+  const tray = new Tray(finalIcon)
+  const contextMenu = Menu.buildFromTemplate([
+    { label: '显示', click: () => mainWindow.show() },
+    { label: '退出', role: 'quit' }
+  ])
+  tray.setToolTip('Electron Vue')
+  tray.setContextMenu(contextMenu)
 
   // 窗口控制IPC监听
   ipcMain.on('window-minimize', () => mainWindow.minimize())
