@@ -38,6 +38,9 @@ npm run build
 npm run build:electron
 ```
 
+展示图片
+![](./public/build.png)
+
 ## 项目结构
 
 ```bash
