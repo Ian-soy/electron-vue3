@@ -33,34 +33,24 @@ module.exports = {
     win: {
         target: [
             {
-                target: 'nsis',
-                arch: ['x64']
-            }
-        ]
-    },
-    h5: {
-        target: [
-            {
-                target: 'zip',
+                target: 'nsis', // windows nsis 安装程序
                 arch: ['x64']
             }
         ]
     },
     mac: {
-        target: [
-            {
-                target: 'zip',
-                arch: ['x64']
-            }
-        ]
+        target: 'dmg',
+        category: "public.app-category.utilities"
     },
-    linux: {
-        target: [
-            {
-                target: 'zip',
-                arch: ['x64']
-            }
-        ]
+    dmg: {
+        "icon": "./public/ico",             // 应用图标
+        "iconSize": 100,                         // 图标尺寸
+        "window": {                              // 窗口位置
+        "x": 100,
+        "y": 100,
+        "width": 500,
+        "height": 300
+        },
     },
     nsis: {
         oneClick: false, // 不使用一键安装
@@ -71,8 +61,8 @@ module.exports = {
         shortcutName: 'Electron Vue', // 自定义快捷方式名称
         runAfterFinish: false, // 不自动运行安装程序
         include: 'build/installer.nsh', // 自定义nsis安装脚本
-        // installerIcon: 'build/icon.ico', // 自定义安装图标
-        // uninstallerIcon: 'build/icon.ico', // 自定义卸载图标
-        // installerHeaderIcon: 'build/icon.ico' // 自定义安装器头部图标
+        installerIcon: 'public/icon.ico', // 自定义安装图标
+        uninstallerIcon: 'public/icon.ico', // 自定义卸载图标
+        installerHeaderIcon: 'public/icon.ico' // 自定义安装器头部图标
     }
 }

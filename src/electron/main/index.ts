@@ -6,19 +6,41 @@
  * author: yuanjun
  * date: 2025-06-20
 */
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron';
+import path from 'path';
 
 app.whenReady().then(() => {
-  const win = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    // remove the default titlebar
+    titleBarStyle: 'hidden', // 隐藏原生标题栏
+    frame: false, // 无边框窗口（可选）
+    show: false,
     webPreferences: {
-        nodeIntegration: true
-    },
+        preload: path.join(__dirname, '..', 'preload/index.js'),
+        contextIsolation: true
+    }
+  })
+
+  console.log(111);
+  mainWindow.on('ready-to-show', () => {
+    console.log(123)
+    mainWindow.show();
   })
 
   if (process.env.VITE_DEV_SERVER_URL) {
-    win.loadURL(process.env.VITE_DEV_SERVER_URL as string)
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL as string)
   } else {
     // 生产环境下，加载打包后的文件
-    win.loadFile('dist/index.html')
+    mainWindow.loadFile('dist/index.html')
   }
+
+  // 窗口控制IPC监听
+  ipcMain.on('window-minimize', () => mainWindow.minimize())
+  ipcMain.on('window-toggle-maximize', () => {
+    mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
+  })
+  ipcMain.on('window-close', () => mainWindow.close())
+
 })
