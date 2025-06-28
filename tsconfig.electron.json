@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/main/*": ["src/electron/main/*"],
+      "@/shared/*": ["src/shared/*"],
+      "*": ["node_modules/*"]
+    },
+    /* Linting */
+    "strict": true,
+    "outDir": "dist-electron"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
+}

@@ -2,15 +2,20 @@
 <script setup lang="ts">
     import { ref } from 'vue'
     const isMaximized = ref(false)
-    const minimize = () => {
-        (window as any).electronAPI.minimize()
+    import { IPCChannel } from '../../shared/types/ipc.types'
+
+
+    const handleMinimize = () => {
+      console.log(444444);
+        window.electronAPI.send(IPCChannel.WINDOW_MINIMIZE)
     }
+
     const toggleMaximize = () => {
-        (window as any).electronAPI.toggleMaximize()
+        window.electronAPI.toggleMaximize()
         isMaximized.value = !isMaximized.value
     }
     const close = () => {
-        (window as any).electronAPI.close()
+        window.electronAPI.close()
     }
 </script>
 
@@ -18,7 +23,7 @@
   <div class="title-bar">
     <div class="title">Electron Vue</div>
     <div class="controls">
-        <button @click="minimize" title="最小化" id="min-btn">－</button>
+        <button @click="handleMinimize" title="最小化" id="min-btn">－</button>
         <button @click="toggleMaximize" title="最大化" id="max-btn">{{ isMaximized ? '❐' : '□' }}</button>
         <button @click="close" title="关闭" id="close-btn">×</button>
     </div>

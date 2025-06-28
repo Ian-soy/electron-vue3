@@ -8,9 +8,9 @@
 */
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import path from 'path'
 
 import electron from 'vite-plugin-electron'
-import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -21,6 +21,11 @@ export default defineConfig({
         build: {
           outDir: 'dist-electron/main',
         },
+        resolve: {
+          alias: {
+            '@/main': path.resolve(__dirname, './src/electron/main'),
+          }
+        }
       }
     },
     {
@@ -29,15 +34,22 @@ export default defineConfig({
         build: {
           outDir: 'dist-electron/preload',
         },
+        resolve: {
+          alias: {
+            '@/preload': path.resolve(__dirname, './src/electron/preload'),
+          }
+        }
       }
     }
-  ]),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'src/assets/*', // 要复制的文件
-          dest: 'dist-electron/assets' // 输出目录 (位于dist下)
-        }
-      ]
-    })],
+  ])],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    }
+  },
+  // build: {
+  //   rollupOptions: {
+  //     external: ['./src/shared/types/ipc.types.ts'], // 将类型文件标记为外部模块
+  //   },
+  // },
 })

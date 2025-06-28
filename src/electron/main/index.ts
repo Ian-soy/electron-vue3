@@ -6,8 +6,8 @@
  * author: yuanjun
  * date: 2025-06-20
 */
-import { app, BrowserWindow, ipcMain, Tray, Menu } from 'electron';
-import path from 'path';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import * as path from 'path';
 
 // 主进程事件监听
 app.whenReady().then(() => {
@@ -38,24 +38,42 @@ app.whenReady().then(() => {
 
   // 系统托盘
   // 开发环境使用 src 目录
-  const devIcon = path.join(__dirname, '../../src/assets/icon.ico')
+  // const devIcon = path.join(__dirname, '..', 'src', '/renderer/assets/icon.ico')
 
-  // 生产环境使用 resources 目录
-  const prodIcon = path.join(process.resourcesPath, 'assets/icon.ico')
-  const finalIcon = process.env.NODE_ENV === 'development' ? devIcon : prodIcon
-  const tray = new Tray(finalIcon)
-  const contextMenu = Menu.buildFromTemplate([
-    { label: '显示', click: () => mainWindow.show() },
-    { label: '退出', role: 'quit' }
-  ])
-  tray.setToolTip('Electron Vue')
-  tray.setContextMenu(contextMenu)
+  // // 生产环境使用 resources 目录
+  // const prodIcon = path.join(process.resourcesPath, 'assets/icon.ico')
+  // const finalIcon = process.env.NODE_ENV === 'development' ? devIcon : prodIcon
+  // const tray = new Tray('')
+  // const contextMenu = Menu.buildFromTemplate([
+  //   { label: '显示', click: () => mainWindow.show() },
+  //   { label: '退出', role: 'quit' }
+  // ])
+  // tray.setToolTip('Electron Vue')
+  // tray.setContextMenu(contextMenu)
 
-  // 窗口控制IPC监听
   ipcMain.on('window-minimize', () => mainWindow.minimize())
   ipcMain.on('window-toggle-maximize', () => {
     mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
   })
   ipcMain.on('window-close', () => mainWindow.close())
-
 })
+
+// 由于9.x版本问题，需要加入该配置关闭跨域问题
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors')
+
+app.on('window-all-closed', () => {
+  // 所有平台均为所有窗口关闭就退出软件
+  app.quit()
+})
+app.on('browser-window-created', () => {
+  console.log('window-created')
+})
+
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.removeAsDefaultProtocolClient('electron-vue-template')
+    console.log('由于框架特殊性开发环境下无法使用')
+  }
+} else {
+  app.setAsDefaultProtocolClient('electron-vue-template')
+}
