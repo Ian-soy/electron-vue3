@@ -20,6 +20,12 @@ const currentTime = new Date().getTime().toString();
 module.exports = {
     productName: "Electron Vue",
     copyright: "Copyright©2025 Electron Vue",
+    appVersion: "1.0.0", // 应用版本号（影响安装包版本显示）
+    publish: {
+    provider: "github", // 自动更新提供商（如 GitHub Releases）
+    owner: "yuanjun",
+    repo: "electron-vue"
+    },
     directories: {
         output: `release/${currentTime}`
     },
@@ -29,7 +35,8 @@ module.exports = {
         "!node_modules"
     ],
     asar: true,
-    compression: 'maximum',
+    // 仅在生产环境压缩
+    compression: process.env.NODE_ENV === "production" ? "maximum" : "store",
     win: {
         target: [
             {
@@ -43,7 +50,7 @@ module.exports = {
         category: "public.app-category.utilities"
     },
     dmg: {
-        "icon": "./public/ico",             // 应用图标
+        "icon": "public/icon.icns",             // 应用图标
         "iconSize": 100,                         // 图标尺寸
         "window": {                              // 窗口位置
         "x": 100,
